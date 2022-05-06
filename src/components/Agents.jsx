@@ -1,45 +1,120 @@
 ﻿import {react, useEffect, useState} from 'react';
 import AddAgentForm from "./AddAgentForm";
+import Agent from "./Agent";
 
 const SearchURL = "http://localhost:5000/api/agent/search/A";
+const URL = "http://localhost:5000/api/agent";
 
-
-const init = {
+const get = {
     method: "GET",
     headers: {
-        "Content-Type": "application/json",
         "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
+    },
+};
+const update = {
+    method: "PUT",
+    headers: {
+        "Accept": "application/json",
+    },
+};
+const add = {
+    method: "POST",
+    headers: {
+        "Accept": "application/json",
+    },
+};
+const remove = {
+    method: "DELETE",
+    headers: {
+        "Accept": "application/json",
     },
 };
 
-const SearchConfig = [
-    {"agentId": 71,
-        "firstName": "Madelene",
-        "lastName": "Wrout",
-        "dateOfBirth": "1996-07-10T00:00:00",
-        "height": 77.00,
-        "missionAgent": null,
-        "agencyAgent": null,
-        "alias": null},
-];
 
 function Agents(){
 
     const [agents, setAgents] = useState([]);
+
     const [token, setToken] = useState();
 
+    useEffect(() => {
+        getAgents();
+            },[setAgents]);
+
+    const login = () => {
+        setToken(token);
+        get.headers.append("Authorization", "Bearer " + token);
+        update.headers.append("Authorization", "Bearer " + token);
+        add.headers.append("Authorization", "Bearer " + token);
+        remove.headers.append("Authorization", "Bearer " + token);
+    };
+
+    const getAgents = async () => {
+        // get agents from database
+        fetch(URL, get)
+            .then(res => res.json())
+            .then(data => {
+                setAgents(data);
+                console.log(data);
+            })
+            .catch(err => console.log(err));
+    };
 
     const addAgent = (agent) => {
         // add agent to use state and update database
-        setAgents([...agents, agent]);
+        const currentAgents = [...agents];
+        const nextId = currentAgents.length + 1;
+        agent.id = nextId;
+        currentAgents.push(agent);
+        setAgents(currentAgents);
+        fetch(URL, add)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.log(error));
         console.log(agent);
-
     };
+
+    const getAgent = (id) => {
+        // get agent from database
+        fetch(URL+"/"+id, get)
+            .then(res => res.json())
+            .then(data => {
+                setAgents(data);
+                console.log(data);
+            })
+            .catch(err => console.log(err));
+    };
+
+    const deleteAgent = (agent) => {
+        // delete agent from use state and database
+        const newAgents = agents.filter(agent => agent.id !== agent.id);
+        setAgents(newAgents);
+        fetch(URL + "/" + agent.id, remove)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => console.log(err));
+    };
+
+    const updateAgent = (updatedAgent) => {
+        const newAgentList = [...agents];
+        for (let i = 0; i < newAgentList.length; i++) {
+            if (newAgentList[i].id === updatedAgent.id ) {
+                newAgentList[i] = updatedAgent;
+                break;
+            }
+        }
+
+        setAgents(newAgentList);
+    }
+
     return (
-        <div className="container">
-            <div className="m-5 content-start border border-black h-full">
-                <div className="m-auto p-2 text-black text-4xl text-bold text-center">
+        <div className="container ">
+            <div className="m-5 content-start border border-green-500 bg-green-50">
+                <div className="m-auto text-black text-4xl text-bold text-center">
                     Agents
                 </div>
                 <p className="mx-2 font-semibold">
@@ -48,21 +123,20 @@ function Agents(){
                 <div className="m-auto p-2 justify-center">
                     <label className="m-5 font-bold items-center text-center content-center rounded p-2"> Add Agent: </label>
                     <AddAgentForm submit={addAgent} />
-                    {/*<input onChange={HandleChange} id="fbiSearch" name="SearchData" value = {searchState.queryString}  className="my-5 mx-1 bg-green-200" type="text" placeholder="Search" />*/}
-                    {/*<button onClick={HandleSearch} className="my-5 mx-1 px-2 bg-green-500 hover:bg-red-600"> Search </button>*/}
-                    {/*{searchState.queryString}*/}
                 </div>
             </div>
 
-            <div className="py-2 m-5 content-start border border-black h-full">
-                <div  className="text-black text-4xl text-bold text-center">
+            <div className="m-5 content-start border border-green-500 bg-green-50">
+                <div  className="text-black text-4xl text-bold text-center m-2">
                     Results
                 </div>
                 {/* List Agents */}
                 <ul>
+                    <span className="flex inline-grid grid-cols-8 gap-2">
                     {agents.map(s => (
-                        <li key={s.agentId}>{s.firstName} {s.lastName} {s.dateOfBirth} {s.height}</li>
+                        <Agent key={s.id} updateAgent={updateAgent} agent={s} delete={() => deleteAgent(s)}  />
                     ))}
+                    </span>
                 </ul>
             </div>
         </div>

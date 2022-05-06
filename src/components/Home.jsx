@@ -1,13 +1,11 @@
-﻿import {useState} from "react";
+﻿import {useEffect, useState} from "react";
 
-const SearchURL = "http://localhost:5000/api/agent/search/A";
+const SearchURL = "http://localhost:5000/api/agent/search/";
 
 const init = {
     method: "GET",
     headers: {
-        "Content-Type": "application/json",
         "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
     },
 };
 
@@ -15,7 +13,7 @@ const CONFIG = {
   "api": {
     "url": "http://localhost:8080/api/v1"
   },
-  "queryString": "Adam"
+  "queryString": "a"
 };
 const SearchConfig = [
     {"agentId": 71,
@@ -33,9 +31,13 @@ function Home(){
     const [searchState, setSearchState] = useState(CONFIG);
     const [searchResults, setSearchResults] = useState(SearchConfig);
 
+    useEffect (() => {
+        HandleSearch();
+    }, [searchState]);
+
     const HandleSearch = (evt) => {
         console.log(searchState.queryString);
-        fetch(SearchURL, init)
+        fetch(SearchURL+searchState.queryString, init)
             .then(response => response.json())
             .then(data => {
                 setSearchResults(data);
@@ -52,7 +54,7 @@ function Home(){
     }
   return (
     <div className="grid grid-cols-3">
-        <div className="m-5 content-start border border-black h-full">
+        <div className="m-5 content-start border border-green-500 bg-green-50">
             <div className="m-auto p-2 text-black text-4xl text-bold text-center">
                 FBI
             </div>
@@ -68,7 +70,7 @@ function Home(){
             </div>
         </div>
 
-        <div className="m-5 content-start border border-black h-full">
+        <div className="m-5 content-start border border-green-500 bg-green-50">
             <div  className="text-black text-4xl text-bold text-center">
                 CIA
             </div>
@@ -83,7 +85,7 @@ function Home(){
 
             </div>
         </div>
-        <div className="m-5 content-start border border-black h-full">
+        <div className="m-5 content-start border border-green-500 bg-green-50">
             <div  className="text-black text-4xl text-bold text-center">
                 NSA
             </div>
@@ -99,13 +101,15 @@ function Home(){
         </div>
 
 
-        <div className="py-2 m-5 content-start border border-black h-full">
+        <div className="m-5 content-start border border-green-500 bg-green-50">
             <div  className="text-black text-4xl text-bold text-center">
                 Results
             </div>
             {/* List Agents */}
             <ul>
-                {searchResults.map(s => (
+                {searchResults.length == 0 ?
+                    <li>No Results</li> :
+                    searchResults.map(s => (
                     <li key={s.agentId}>{s.firstName} {s.lastName} {s.dateOfBirth} {s.height}</li>
                 ))}
             </ul>
