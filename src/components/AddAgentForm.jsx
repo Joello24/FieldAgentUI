@@ -43,23 +43,23 @@ function AddAgentForm(props){
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="py-2">
-                <label className="mx-2" htmlFor="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" value={agent.firstName} onChange={handleChange} />
+        <form hidden={props.hidden} onSubmit={handleSubmit}>
+            <div className="py-1">
+                <label className="" htmlFor="firstName">First Name</label>
+                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="firstName" name="firstName" value={agent.firstName} onChange={handleChange} />
             </div>
-            <div className="py-2">
-                <label className="mx-2" htmlFor="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" value={agent.lastName} onChange={handleChange} />
+            <div className="py-1">
+                <label className="" htmlFor="lastName">Last Name</label>
+                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="lastName" name="lastName" value={agent.lastName} onChange={handleChange} />
             </div>
-            <div className="mx-2 py-2">
-                <label className="py-1" htmlFor="datePicker">Date of birth</label>
-                <DatePicker id="datePicker" name="datePicker"  value={agent.dateOfBirth}  onChange={handleChange} />
+            <div className="py-1">
+                <label className="" htmlFor="datePicker">Date of birth</label>
+                <DatePicker className={props.mini ? "w-20 h-6" : ""} id="datePicker" name="datePicker"  value={agent.dateOfBirth}  onChange={handleChange} />
             </div>
             <div>
                 <label htmlFor="height">Height</label>
-                <select className="mx-2" id="height" name="height" value={agent.height} onChange={handleChange}>
-                    <option value="">[Select Height]</option>
+                <select className="" id="height" name="height" value={agent.height} onChange={handleChange}>
+                    <option value="">Height</option>
                     <option value="56">4'8"</option>
                     <option value="57">4'9"</option>
                     <option value="58">4'10"</option>
@@ -92,7 +92,7 @@ function AddAgentForm(props){
             </div>
 
             <div>
-                <button className="my-5 mx-1 px-2 bg-green-500 hover:bg-red-600" type="submit">Add</button>
+                <button className="my-5 mx-1 px-2 bg-green-500 hover:bg-red-600" type="submit">✔</button>
             </div>
         </form>
     )

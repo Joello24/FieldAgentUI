@@ -27,26 +27,25 @@ const remove = {
     method: "DELETE",
     headers: {
         "Accept": "application/json",
+        "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTE4OTY3ODQsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.b1ihrsINEVJ0qvm_-tIKYgi44a9dK5i9H00ezQyBF2g"
     },
 };
 
 
-function Agents(){
+function Agents(props){
 
     const [agents, setAgents] = useState([]);
 
-    const [token, setToken] = useState();
 
     useEffect(() => {
         getAgents();
             },[setAgents]);
 
     const login = () => {
-        setToken(token);
-        get.headers.append("Authorization", "Bearer " + token);
-        update.headers.append("Authorization", "Bearer " + token);
-        add.headers.append("Authorization", "Bearer " + token);
-        remove.headers.append("Authorization", "Bearer " + token);
+        get.headers.append("Authorization", "Bearer " + props.token);
+        update.headers.append("Authorization", "Bearer " + props.token);
+        add.headers.append("Authorization", "Bearer " + props.token);
+        remove.headers.append("Authorization", "Bearer " + props.token);
     };
 
     const getAgents = async () => {
@@ -89,26 +88,101 @@ function Agents(){
 
     const deleteAgent = (agent) => {
         // delete agent from use state and database
-        const newAgents = agents.filter(agent => agent.id !== agent.id);
-        setAgents(newAgents);
-        fetch(URL + "/" + agent.id, remove)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTE4OTg0MjMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.XhiljjRMfGmb2oinm8o--gc-DQq4wkvGxZR40DmJUaA");
+
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const url = `http://localhost:5000/api/agent/${agent.agentId}`;
+        fetch(url, requestOptions)
+            .then(response => {
+                if (response.status !== 200) {
+                    console.log(`Bad status: ${response.status}`);
+                    return Promise.reject("response is not 200 OK");
+                }
+                UpdateResults(agent);
+                return response.json();
             })
-            .catch(err => console.log(err));
+            .then(json => console.log(json));
     };
 
+    const UpdateResults = (agent) => {
+        // update use state after deletion
+        const currentAgents = [...agents];
+        const index = currentAgents.indexOf(agent);
+        currentAgents.splice(index, 1);
+        setAgents(currentAgents);
+    };
     const updateAgent = (updatedAgent) => {
-        const newAgentList = [...agents];
-        for (let i = 0; i < newAgentList.length; i++) {
-            if (newAgentList[i].id === updatedAgent.id ) {
-                newAgentList[i] = updatedAgent;
-                break;
-            }
-        }
 
-        setAgents(newAgentList);
+        // const myHeaders = new Headers();
+        // myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTE4OTg0MjMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.XhiljjRMfGmb2oinm8o--gc-DQq4wkvGxZR40DmJUaA");
+        //
+        // myHeaders.append("Content-Type", "application/json");
+        //
+        // const raw = JSON.stringify(updatedAgent);
+        //
+        // const requestOptions = {
+        //     method: 'PUT',
+        //     headers: myHeaders,
+        //     body: raw,
+        //     redirect: 'follow'
+        // };
+        //
+        // fetch(URL, requestOptions)
+        //     .then(response => {
+        //         if (response.status !== 200) {
+        //             console.log(`Bad status: ${response.status}`);
+        //             return Promise.reject("response is not 200 OK");
+        //         }
+        //         const newAgentList = [...agents];
+        //         for (let i = 0; i < newAgentList.length; i++) {
+        //             if (newAgentList[i].agentId === updatedAgent.agentId ) {
+        //                 newAgentList[i] = updatedAgent;
+        //                 break;
+        //             }
+        //         }
+        //         setAgents(newAgentList);
+        //         return response.json();
+        //     })
+        //     .then(json => console.log(json));
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTE5MDUyMjEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.vxK7RzdL7AxchV6fAGc6ZXV9815li-11Wh1k9fb_HSs");
+        myHeaders.append("Content-Type", "application/json");
+
+        // working
+        const raw = JSON.stringify({
+            "agentId": "5",
+            "firstName": "NEWNEWNewNEfdsfdsaaWNewJim",
+            "lastName": "Halpfdasfsaert",
+            "dateOfBirth": "1995-01-01T00:00:00",
+            "height": 72,
+            "alias": ""
+        });
+
+        // WORKING WITH HARD-CODED Date of Birth
+        const raw2 = JSON.stringify({
+            "agentId": updatedAgent.agentId.toString(),
+            "firstName": updatedAgent.firstName,
+            "lastName": updatedAgent.lastName,
+            "dateOfBirth": "1995-01-01T00:00:00",
+            "height": updatedAgent.height.toString(),
+            "alias": ""
+        });
+        const requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:5000/api/agent", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
 
     return (
@@ -132,7 +206,7 @@ function Agents(){
                 </div>
                 {/* List Agents */}
                 <ul>
-                    <span className="flex inline-grid grid-cols-8 gap-2">
+                    <span className="flex inline-grid grid-cols-8 mx-2 gap-2">
                     {agents.map(s => (
                         <Agent key={s.id} updateAgent={updateAgent} agent={s} delete={() => deleteAgent(s)}  />
                     ))}

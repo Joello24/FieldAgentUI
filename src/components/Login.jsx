@@ -1,5 +1,29 @@
-﻿
-function Login(){
+﻿import {useState} from "react";
+
+function Login(props){
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    function handleSubmit(evt) {
+        evt.preventDefault();
+
+        console.log("Logging in user:", username, password);
+        const login = {
+            UserName: username,
+            Password: password
+        };
+        props.login(login);
+    }
+    const handleChangeUser = function (evt) {
+        setUsername(evt.target.value);
+        console.log(password);
+    };
+    const handleChangePass = function (evt) {
+        setPassword(evt.target.value);
+        console.log(password);
+    };
+
     return (
         <section className="h-screen">
             <div className="container px-6 py-12 h-full">
@@ -12,12 +36,14 @@ function Login(){
                         />
                     </div>
                     <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="mb-6">
                                 <input
                                     type="text"
                                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-green-600 focus:outline-none"
-                                    placeholder="Email address"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={handleChangeUser}
                                 />
                             </div>
 
@@ -26,6 +52,8 @@ function Login(){
                                     type="password"
                                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-green-600 focus:outline-none"
                                     placeholder="Password"
+                                    value={password}
+                                    onChange={handleChangePass}
                                 />
                             </div>
 
