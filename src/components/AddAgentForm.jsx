@@ -26,7 +26,6 @@ function AddAgentForm(props){
 
     const [agent, setAgent] = useState(initialAgent);
     const [dateOfBirth, setDateOfBirth] = useState(new Date());
-
     const handleChange = function (evt) {
         let nextAgent = { ...agent };
         nextAgent[evt.target.name] = evt.target.value;
@@ -39,6 +38,9 @@ function AddAgentForm(props){
 
         console.log("submitted!", agent);
 
+        // if(dateOfBirth !== null && dateOfBirth !== undefined){
+        //     agent.dateOfBirth = dateOfBirth;
+        // }
         props.submit(agent);
     }
 
@@ -53,8 +55,11 @@ function AddAgentForm(props){
                 <input className={props.mini ? "w-20 h-5" : ""} type="text" id="lastName" name="lastName" value={agent.lastName} onChange={handleChange} />
             </div>
             <div className="py-1">
-                <label className="" htmlFor="datePicker">Date of birth</label>
-                <DatePicker className={props.mini ? "w-20 h-6" : ""} id="datePicker" name="datePicker"  value={agent.dateOfBirth}  onChange={handleChange} />
+                <label className="" htmlFor="dateOfBirth">Date of birth</label>
+                <DatePicker className={props.mini ? "w-20 h-6" : ""} id="dateOfBirth" name="dateOfBirth"  value={agent.dateOfBirth}  onChange={(date) => setDateOfBirth(date)} />
+            </div>
+            <div className="py-1">
+                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="dateOfBirth" name="dateOfBirth" value={agent.dateOfBirth} onChange={handleChange} />
             </div>
             <div>
                 <label htmlFor="height">Height</label>
