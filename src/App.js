@@ -10,7 +10,7 @@ import {
     Navigate,
 } from "react-router-dom";
 import Login from "./components/Login";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {root} from "postcss";
 
 const loginUrl = "http://localhost:5000/api/auth/login";
@@ -26,6 +26,7 @@ function App() {
 
     const [token, setToken] = useState();
     const [loggedIn, setLoggedIn] = useState(false);
+
 
     const handleLogin = (login) => {
         const loginInput = JSON.stringify({

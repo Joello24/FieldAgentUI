@@ -28,7 +28,7 @@ function Agent(props){
             <button onClick={props.delete} className="px-2 bg-red-400 hover:bg-red-600">Delete</button>
             <button hidden={isEditing} onClick={setEditMode} className="mx-1 px-2 bg-green-400 hover:bg-green-500">Edit</button>
             <button hidden={!isEditing} onClick={confirmEdit} className="mx-1 px-2 bg-green-400 hover:bg-green-500">Okay</button>
-            <AddAgentForm hidden={!isEditing} submit={confirmEdit} mini = {true}/>
+            <AddAgentForm hidden={!isEditing} submit={confirmEdit} me={props.agent} mini = {true}/>
         </a>
     )
 }

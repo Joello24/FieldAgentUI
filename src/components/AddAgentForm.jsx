@@ -38,32 +38,34 @@ function AddAgentForm(props){
 
         console.log("submitted!", agent);
 
-        // if(dateOfBirth !== null && dateOfBirth !== undefined){
-        //     agent.dateOfBirth = dateOfBirth;
-        // }
+        if(!agent.firstName && props.me.firstName !== undefined){
+            agent.firstName = props.me.firstName;
+        }
+        if(!agent.lastName && props.me.lastName !== undefined){
+            agent.lastName = props.me.lastName;
+        }
+        if(!agent.dateOfBirth && props.me.dateOfBirth !== undefined){
+            agent.dateOfBirth = props.me.dateOfBirth;
+        }
+        if(!agent.height && props.me.height !== undefined){
+            agent.height = props.me.height;
+        }
         props.submit(agent);
     }
 
     return (
         <form hidden={props.hidden} onSubmit={handleSubmit}>
             <div className="py-1">
-                <label className="" htmlFor="firstName">First Name</label>
-                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="firstName" name="firstName" value={agent.firstName} onChange={handleChange} />
+                <label className="text-green-500 text-bold" htmlFor="firstName">First Name: </label>
+                <input className={props.mini ? "w-20 h-5" : "float-center"} type="text" id="firstName" name="firstName" value={agent.firstName} onChange={handleChange} />
             </div>
             <div className="py-1">
-                <label className="" htmlFor="lastName">Last Name</label>
-                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="lastName" name="lastName" value={agent.lastName} onChange={handleChange} />
-            </div>
-            <div className="py-1">
-                <label className="" htmlFor="dateOfBirth">Date of birth</label>
-                <DatePicker className={props.mini ? "w-20 h-6" : ""} id="dateOfBirth" name="dateOfBirth"  value={agent.dateOfBirth}  onChange={(date) => setDateOfBirth(date)} />
-            </div>
-            <div className="py-1">
-                <input className={props.mini ? "w-20 h-5" : ""} type="text" id="dateOfBirth" name="dateOfBirth" value={agent.dateOfBirth} onChange={handleChange} />
+                <label className="text-green-500 text-bold" htmlFor="lastName">Last Name: </label>
+                <input className={props.mini ? "w-20 h-5" : "float-center"} type="text" id="lastName" name="lastName" value={agent.lastName} onChange={handleChange} />
             </div>
             <div>
-                <label htmlFor="height">Height</label>
-                <select className="" id="height" name="height" value={agent.height} onChange={handleChange}>
+                <label className="text-green-500 text-bold" htmlFor="height">Height: </label>
+                <select className="float-center mx-6 py-1 my-1" id="height" name="height" value={agent.height} onChange={handleChange}>
                     <option value="">Height</option>
                     <option value="56">4'8"</option>
                     <option value="57">4'9"</option>
@@ -94,6 +96,13 @@ function AddAgentForm(props){
                     <option value="82">6'9"</option>
                     <option value="83">6'10"</option>
                 </select>
+            </div>
+            <div className="py-1">
+                <label className="text-green-500 text-bold" htmlFor="dateOfBirth">Date of birth</label>
+                <DatePicker className={props.mini ? "w-20 h-6" : "float-center"} id="dateOfBirth" name="dateOfBirth"  value={agent.dateOfBirth}  onChange={(date) => setDateOfBirth(date)} />
+            </div>
+            <div className="py-1">
+                <input className={props.mini ? "w-20 h-5" : "float-center"} type="text" id="dateOfBirth" name="dateOfBirth" value={agent.dateOfBirth} onChange={handleChange} />
             </div>
 
             <div>

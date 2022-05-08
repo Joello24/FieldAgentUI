@@ -221,14 +221,14 @@ function Agents(props){
             {props.getToken}
             <div className="m-5 h-50 flex columns-3 border border-green-500 bg-green-50">
                 <div className=" m-5 content-start border border-green-500 bg-green-50">
-                    <div className="m-auto text-black text-4xl text-bold text-center">
-                        Agents
+                    <div className="my-2 text-black text-4xl text-bold text-center">
+                        Add Agent
                     </div>
                     <p className="mx-2 font-semibold">
                     </p>
                     {/* Sort FBI Agents */}
                     <div className="m-auto p-2 justify-center">
-                        <label className="m-5 font-bold items-center text-center content-center rounded p-2"> Add Agent: </label>
+                        <label className="m-5 font-bold items-center text-center content-center rounded p-2">  </label>
                         <AddAgentForm submit={addAgent} />
                     </div>
                 </div>
